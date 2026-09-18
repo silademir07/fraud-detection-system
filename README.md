@@ -1,4 +1,4 @@
-# 💳 AI Fraud Detection System
+# AI Fraud Detection System
 
 A machine learning-based credit card fraud detection system developed using Python, Scikit-learn, Random Forest, and Streamlit.
 
@@ -6,7 +6,7 @@ The project analyzes anonymized credit card transactions and classifies them as 
 
 ---
 
-## 🚀 Project Overview
+## Project Overview
 
 Credit card fraud detection is an important machine learning problem, especially in banking and financial systems.
 
@@ -23,7 +23,7 @@ The main goal of this project is to build an end-to-end fraud detection pipeline
 
 ---
 
-## 📊 Dataset
+## Dataset
 
 The project uses the **Credit Card Fraud Detection** dataset.
 
@@ -53,7 +53,7 @@ The large `creditcard.csv` dataset is not included in this repository.
 
 ---
 
-## 🤖 Machine Learning Model
+## Machine Learning Model
 
 The project uses a:
 
@@ -68,7 +68,7 @@ Stratified sampling is used to preserve the fraud/normal class distribution.
 
 ---
 
-## 📈 Model Performance
+## Model Performance
 
 Performance on the held-out test set:
 
@@ -83,7 +83,7 @@ Because the dataset is highly imbalanced, **Precision, Recall and F1 Score** are
 
 ---
 
-## 🔍 Confusion Matrix
+## Confusion Matrix
 
 The model produced the following results on the test set:
 
@@ -96,7 +96,7 @@ The model produced the following results on the test set:
 
 ---
 
-## 🧠 Feature Importance
+## Feature Importance
 
 Random Forest feature importance was used to examine which transformed features contributed most to model decisions.
 
@@ -108,7 +108,7 @@ Because V1–V28 are anonymized PCA-transformed features, they cannot be directl
 
 ---
 
-## 🌐 Streamlit Web Application
+## Streamlit Web Application
 
 The project includes an interactive Streamlit dashboard.
 
@@ -127,7 +127,7 @@ The displayed fraud score is the classifier's model output and should not be int
 
 ---
 
-## 🛠️ Technologies
+## Technologies
 
 - Python
 - Pandas
@@ -142,7 +142,7 @@ The displayed fraud score is the classifier's model output and should not be int
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```text
 fraud-detection-system/
@@ -164,7 +164,7 @@ fraud-detection-system/
 
 ---
 
-## ⚙️ Installation
+## Installation
 
 Clone the repository:
 
@@ -198,7 +198,7 @@ pip install -r requirements.txt
 
 ---
 
-## ▶️ Running the Application
+## Running the Application
 
 After placing `creditcard.csv` in the project directory, run:
 
@@ -210,7 +210,7 @@ Then open the local Streamlit address shown in the terminal.
 
 ---
 
-## ⚠️ Disclaimer
+## Disclaimer
 
 This project is developed for **educational and portfolio purposes**.
 
@@ -218,7 +218,7 @@ It is not a production banking fraud detection system and should not be used to 
 
 ---
 
-## 👩‍💻 Author
+## Author
 
 **Sıla Demir**
 

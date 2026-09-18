@@ -2,9 +2,7 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-# --------------------------------------------------
 # PAGE CONFIGURATION
-# --------------------------------------------------
 
 st.set_page_config(
     page_title="AI Fraud Detection",
@@ -12,9 +10,9 @@ st.set_page_config(
     layout="wide"
 )
 
-# --------------------------------------------------
+
 # LOAD MODEL AND DATA
-# --------------------------------------------------
+
 
 @st.cache_resource
 def load_model():
@@ -32,9 +30,8 @@ data = load_data()
 X = data.drop("Class", axis=1)
 y = data["Class"]
 
-# --------------------------------------------------
+
 # HEADER
-# --------------------------------------------------
 
 st.title("💳 AI Fraud Detection System")
 
@@ -45,9 +42,8 @@ st.caption(
 
 st.divider()
 
-# --------------------------------------------------
 # MODEL INFORMATION
-# --------------------------------------------------
+
 
 st.subheader("📊 Model Overview")
 
@@ -93,9 +89,9 @@ with col6:
 
 st.divider()
 
-# --------------------------------------------------
+
 # TRANSACTION ANALYSIS
-# --------------------------------------------------
+
 
 st.subheader("🔍 Transaction Analysis")
 
@@ -129,9 +125,9 @@ with info2:
 
 st.write("")
 
-# --------------------------------------------------
+
 # ANALYSIS
-# --------------------------------------------------
+
 
 if st.button(
     "Analyze Transaction",
@@ -191,9 +187,9 @@ if st.button(
 
 st.divider()
 
-# --------------------------------------------------
+
 # MODEL EVALUATION
-# --------------------------------------------------
+
 
 st.subheader("📈 Model Evaluation")
 
@@ -243,9 +239,9 @@ with tab2:
         "in this dataset."
     )
 
-# --------------------------------------------------
+
 # FOOTER
-# --------------------------------------------------
+
 
 st.divider()
 
