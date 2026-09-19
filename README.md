@@ -1,4 +1,11 @@
 # AI Fraud Detection System
+##  Live Demo
+
+🚀 Try the live application here:
+
+[Open AI Fraud Detection System](https://fraud-detection-system-5jnhgpempxjs4czdbxueod.streamlit.app)
+
+---
 
 A machine learning-based credit card fraud detection system developed using Python, Scikit-learn, Random Forest, and Streamlit.
 
