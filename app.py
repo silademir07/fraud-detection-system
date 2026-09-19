@@ -2,16 +2,12 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-# PAGE CONFIGURATION
 
 st.set_page_config(
     page_title="AI Fraud Detection",
     page_icon="💳",
     layout="wide"
 )
-
-
-# LOAD MODEL AND DATA
 
 
 @st.cache_resource
@@ -31,8 +27,6 @@ X = data.drop("Class", axis=1)
 y = data["Class"]
 
 
-# HEADER
-
 st.title("💳 AI Fraud Detection System")
 
 st.caption(
@@ -42,8 +36,8 @@ st.caption(
 
 st.divider()
 
-# MODEL INFORMATION
 
+# MODEL OVERVIEW
 
 st.subheader("📊 Model Overview")
 
@@ -51,13 +45,13 @@ col1, col2, col3, col4 = st.columns(4)
 
 with col1:
     st.metric(
-        "Transactions",
+        "Demo Transactions",
         f"{len(data):,}"
     )
 
 with col2:
     st.metric(
-        "Fraud Cases",
+        "Demo Fraud Cases",
         f"{(y == 1).sum():,}"
     )
 
@@ -73,6 +67,7 @@ with col4:
         "78.57%"
     )
 
+
 col5, col6 = st.columns(2)
 
 with col5:
@@ -87,11 +82,18 @@ with col6:
         "Random Forest"
     )
 
+
+st.caption(
+    "The metrics above were calculated on the held-out test set "
+    "of the original credit card dataset. "
+    "The 100 transactions used in this interface are a lightweight "
+    "demo sample for deployment."
+)
+
 st.divider()
 
 
 # TRANSACTION ANALYSIS
-
 
 st.subheader("🔍 Transaction Analysis")
 
@@ -109,6 +111,7 @@ transaction = X.iloc[[transaction_index]]
 
 amount = transaction["Amount"].iloc[0]
 
+
 info1, info2 = st.columns(2)
 
 with info1:
@@ -123,16 +126,14 @@ with info2:
         f"${amount:,.2f}"
     )
 
+
 st.write("")
-
-
-# ANALYSIS
 
 
 if st.button(
     "Analyze Transaction",
     type="primary",
-    use_container_width=True
+    width="stretch"
 ):
 
     prediction = model.predict(transaction)[0]
@@ -143,21 +144,40 @@ if st.button(
 
     actual_class = y.iloc[transaction_index]
 
+
+    # RISK LEVEL
+
+    if fraud_score < 0.30:
+        risk_level = "🟢 LOW RISK"
+
+    elif fraud_score < 0.70:
+        risk_level = "🟠 MEDIUM RISK"
+
+    else:
+        risk_level = "🔴 HIGH RISK"
+
+
     st.divider()
 
     st.subheader("🧠 Analysis Result")
 
-    result1, result2, result3 = st.columns(3)
 
-    # Prediction
+    result1, result2, result3, result4 = st.columns(4)
+
+
+    # PREDICTION
+
     with result1:
 
         if prediction == 1:
             st.error("⚠️ FRAUD DETECTED")
+
         else:
             st.success("✅ NORMAL TRANSACTION")
 
-    # Fraud score
+
+    # FRAUD SCORE
+
     with result2:
 
         st.metric(
@@ -165,19 +185,61 @@ if st.button(
             f"{fraud_score * 100:.2f}%"
         )
 
-    # Actual class
+
+    # ACTUAL CLASS
+
     with result3:
 
         if actual_class == 1:
+
             st.metric(
                 "Actual Dataset Class",
                 "Fraud"
             )
+
         else:
+
             st.metric(
                 "Actual Dataset Class",
                 "Normal"
             )
+
+
+    # RISK LEVEL
+
+    with result4:
+
+        st.metric(
+            "Risk Level",
+            risk_level
+        )
+
+
+    # RISK SCORE PROGRESS BAR
+
+    st.write("### 📊 Risk Score")
+
+    st.progress(fraud_score)
+
+    st.caption(
+        f"Model Risk Score: {fraud_score * 100:.2f}%"
+    )
+
+
+    # PREDICTION CHECK
+
+    if prediction == actual_class:
+
+        st.success(
+            "Model prediction matches the actual dataset class."
+        )
+
+    else:
+
+        st.warning(
+            "Model prediction does not match the actual dataset class."
+        )
+
 
     st.caption(
         "The Model Fraud Score is the classifier's output score "
@@ -185,11 +247,11 @@ if st.button(
         "probability of fraud."
     )
 
+
 st.divider()
 
 
 # MODEL EVALUATION
-
 
 st.subheader("📈 Model Evaluation")
 
@@ -200,37 +262,71 @@ tab1, tab2 = st.tabs(
     ]
 )
 
+
+# CONFUSION MATRIX
+
 with tab1:
 
     st.write(
-        "The confusion matrix shows how the model performed "
-        "on the held-out test dataset."
+        "The confusion matrix shows how the Random Forest model "
+        "performed on the held-out test dataset."
     )
 
     st.image(
         "confusion_matrix.png",
         caption="Random Forest Confusion Matrix",
-        use_container_width=True
+        width="stretch"
     )
 
-    st.write(
-        "**True Negative:** 56,857  |  "
-        "**False Positive:** 7  |  "
-        "**False Negative:** 21  |  "
-        "**True Positive:** 77"
-    )
+
+    metric1, metric2, metric3, metric4 = st.columns(4)
+
+
+    with metric1:
+
+        st.metric(
+            "True Negative",
+            "56,857"
+        )
+
+
+    with metric2:
+
+        st.metric(
+            "False Positive",
+            "7"
+        )
+
+
+    with metric3:
+
+        st.metric(
+            "False Negative",
+            "21"
+        )
+
+
+    with metric4:
+
+        st.metric(
+            "True Positive",
+            "77"
+        )
+
+
+# FEATURE IMPORTANCE
 
 with tab2:
 
     st.write(
         "Feature importance shows which transformed variables "
-        "contributed most to the Random Forest decisions."
+        "contributed most to the Random Forest model's decisions."
     )
 
     st.image(
         "feature_importance.png",
         caption="Top 10 Feature Importances",
-        use_container_width=True
+        width="stretch"
     )
 
     st.info(
@@ -240,12 +336,59 @@ with tab2:
     )
 
 
-# FOOTER
+st.divider()
+
+
+# ABOUT PROJECT
+
+st.subheader("ℹ️ About This Project")
+
+st.write(
+    "This portfolio project demonstrates an end-to-end machine "
+    "learning workflow for credit card fraud detection."
+)
+
+
+about1, about2, about3 = st.columns(3)
+
+
+with about1:
+
+    st.write("**Machine Learning**")
+
+    st.write(
+        "Random Forest Classifier"
+    )
+
+
+with about2:
+
+    st.write("**Backend / Analysis**")
+
+    st.write(
+        "Python, Pandas, Scikit-learn"
+    )
+
+
+with about3:
+
+    st.write("**Web Application**")
+
+    st.write(
+        "Streamlit"
+    )
+
+
+st.info(
+    "This application is an educational portfolio project. "
+    "It is not intended for real banking or financial decision-making."
+)
 
 
 st.divider()
 
+
 st.caption(
-    "AI Fraud Detection Portfolio Project • "
+    "AI Fraud Detection System V2 • "
     "Python • Scikit-learn • Random Forest • Streamlit"
 )
