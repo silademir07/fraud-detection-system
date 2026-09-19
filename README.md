@@ -1,155 +1,204 @@
-# AI Fraud Detection System
-##  Live Demo
+#  AI Fraud Detection System V2
 
-🚀 Try the live application here:
+An interactive fraud detection portfolio project built with **Python, Scikit-learn, Random Forest, Pandas, and Streamlit**.
 
-[Open AI Fraud Detection System](https://fraud-detection-system-5jnhgpempxjs4czdbxueod.streamlit.app)
-
----
-
-A machine learning-based credit card fraud detection system developed using Python, Scikit-learn, Random Forest, and Streamlit.
-
-The project analyzes anonymized credit card transactions and classifies them as **Normal** or **Fraudulent**.
+The project combines an interactive transaction risk simulator with a machine learning evaluation interface for credit card fraud detection.
 
 ---
 
-## Project Overview
+##  Project Overview
 
-Credit card fraud detection is an important machine learning problem, especially in banking and financial systems.
+AI Fraud Detection System V2 contains two main components:
 
-The main goal of this project is to build an end-to-end fraud detection pipeline including:
+###  1. New Transaction Analysis
 
-- Data analysis
-- Data preprocessing
-- Train/test splitting
-- Machine learning model training
-- Fraud prediction
-- Model evaluation
-- Feature importance analysis
-- Interactive web interface
+Users can manually enter transaction information such as:
 
----
+- Transaction amount
+- Distance from home
+- Online transaction status
+- Foreign transaction status
+- Number of failed attempts
+- Unusual transaction behavior
 
-## Dataset
+The application evaluates these inputs using a transparent **rule-based demonstration risk simulator**.
 
-The project uses the **Credit Card Fraud Detection** dataset.
+The simulator returns:
 
-Dataset statistics:
+- Demo Risk Score
+- Risk Level
+- Detected Risk Factors
+- Transaction Summary
 
-- Total transactions: **284,807**
-- Normal transactions: **284,315**
-- Fraudulent transactions: **492**
-- Fraud rate: approximately **0.17%**
+Risk levels are classified as:
 
-The dataset is highly imbalanced, which makes fraud detection more challenging.
+- 🟢 LOW RISK
+- 🟠 MEDIUM RISK
+- 🔴 HIGH RISK
 
-The features **V1–V28** are anonymized PCA-transformed variables.
-
-Additional variables include:
-
-- `Time`
-- `Amount`
-- `Class`
-
-Where:
-
-- `Class = 0` → Normal transaction
-- `Class = 1` → Fraudulent transaction
-
-The large `creditcard.csv` dataset is not included in this repository.
+> This component is a demonstration simulator and is not the output of the trained Random Forest model.
 
 ---
 
-## Machine Learning Model
+###  2. ML Model Evaluation
 
-The project uses a:
+The second component demonstrates a trained **Random Forest classifier** using anonymized credit card transaction data.
+
+Users can select stored demo transactions and compare:
+
+- Model prediction
+- Model fraud score
+- Actual dataset class
+- Prediction correctness
+
+The interface also includes:
+
+- Confusion Matrix
+- Feature Importance
+- Precision
+- Recall
+- F1 Score
+
+---
+
+##  Machine Learning Model
+
+The fraud detection model uses:
 
 **Random Forest Classifier**
 
-The dataset is divided into:
+The original dataset contains anonymized numerical features:
 
-- **80% Training Data**
-- **20% Testing Data**
+```text
+Time
+V1 - V28
+Amount
+Class
+```
 
-Stratified sampling is used to preserve the fraud/normal class distribution.
+Where:
+
+```text
+Class = 0 → Normal Transaction
+Class = 1 → Fraudulent Transaction
+```
+
+The `V1–V28` variables are anonymized PCA-transformed features.
+
+Because their original banking meanings are not available, users are not asked to manually enter these values in the application.
 
 ---
 
-## Model Performance
+##  Model Performance
 
-Performance on the held-out test set:
+The trained Random Forest model achieved the following results on the held-out test set:
 
 | Metric | Result |
 |---|---:|
-| Accuracy | 99.95% |
 | Precision | 91.67% |
 | Recall | 78.57% |
 | F1 Score | 84.62% |
 
-Because the dataset is highly imbalanced, **Precision, Recall and F1 Score** are especially important when evaluating the model.
+### Confusion Matrix
+
+| Result | Count |
+|---|---:|
+| True Negative | 56,857 |
+| False Positive | 7 |
+| False Negative | 21 |
+| True Positive | 77 |
+
+These results show the model's performance on the held-out test data and should not be interpreted as guaranteed performance on real banking transactions.
 
 ---
 
-## Confusion Matrix
+##  New Transaction Risk Simulator
 
-The model produced the following results on the test set:
+The New Transaction Analysis interface uses understandable transaction characteristics instead of anonymized PCA features.
 
-- True Negatives: **56,857**
-- False Positives: **7**
-- False Negatives: **21**
-- True Positives: **77**
+Example inputs include:
 
-![Confusion Matrix](confusion_matrix.png)
+```text
+Transaction Amount
+Distance From Home
+Online Transaction
+Foreign Transaction
+Failed Attempts
+Unusual Transaction
+```
 
----
+The simulator assigns demonstration risk points based on predefined rules and combinations of risk factors.
 
-## Feature Importance
+For example, a transaction may receive additional risk points when:
 
-Random Forest feature importance was used to examine which transformed features contributed most to model decisions.
+- The transaction amount is unusually high
+- The transaction occurs far from the normal location
+- The transaction is foreign
+- Multiple attempts have failed
+- The transaction is marked as unusual
+- Multiple risk factors occur together
 
-The most important feature in the trained model was **V14**.
+The final score is converted into a demonstration risk band:
 
-![Feature Importance](feature_importance.png)
+```text
+0 - 29   → LOW RISK
+30 - 69  → MEDIUM RISK
+70 - 100 → HIGH RISK
+```
 
-Because V1–V28 are anonymized PCA-transformed features, they cannot be directly interpreted as original banking variables.
-
----
-
-## Streamlit Web Application
-
-The project includes an interactive Streamlit dashboard.
-
-The application allows a user to:
-
-- Select a transaction from the dataset
-- View the transaction amount
-- Analyze the transaction with the trained model
-- View the model prediction
-- View the model fraud score
-- Compare the prediction with the dataset label
-- Examine the confusion matrix
-- Examine feature importance
-
-The displayed fraud score is the classifier's model output and should not be interpreted as a calibrated real-world probability of fraud.
+This score is **not a calibrated probability of fraud**.
 
 ---
 
-## Technologies
+##  Model Evaluation Features
+
+The Streamlit application provides visual tools for understanding model performance.
+
+### Confusion Matrix
+
+The confusion matrix shows:
+
+- True Positives
+- True Negatives
+- False Positives
+- False Negatives
+
+This is particularly important in fraud detection because false negatives represent fraudulent transactions that the model failed to detect.
+
+### Feature Importance
+
+The application also displays the most influential features used by the Random Forest model.
+
+Since the dataset is anonymized, features such as `V1`, `V4`, or `V14` do not directly correspond to publicly available banking variables.
+
+---
+
+##  Demo Dataset
+
+A lightweight demo dataset is used in the deployed Streamlit application.
+
+This allows the application to demonstrate model predictions without requiring the full original dataset to be included in the deployment repository.
+
+The demo sample is intended for **interface and model demonstration purposes** and should not be interpreted as representative of real-world fraud prevalence.
+
+---
+
+##  Technologies Used
 
 - Python
 - Pandas
 - NumPy
 - Scikit-learn
 - Random Forest
-- Matplotlib
 - Joblib
+- Matplotlib
 - Streamlit
 - Git
 - GitHub
 
 ---
 
-## Project Structure
+##  Project Structure
 
 ```text
 fraud-detection-system/
@@ -158,20 +207,22 @@ fraud-detection-system/
 ├── main.py
 ├── predict.py
 ├── check_data.py
+├── create_demo_data.py
+│
 ├── fraud_model.pkl
+├── demo_transactions.csv
+│
 ├── confusion_matrix.png
 ├── feature_importance.png
-├── transactions.csv
+│
 ├── requirements.txt
-├── .gitignore
-└── README.md
+├── README.md
+└── .gitignore
 ```
-
-`creditcard.csv` is excluded from Git using `.gitignore`.
 
 ---
 
-## Installation
+##  Running the Project Locally
 
 Clone the repository:
 
@@ -179,7 +230,7 @@ Clone the repository:
 git clone https://github.com/silademir07/fraud-detection-system.git
 ```
 
-Move into the project directory:
+Enter the project directory:
 
 ```bash
 cd fraud-detection-system
@@ -197,36 +248,82 @@ Activate it on macOS/Linux:
 source .venv/bin/activate
 ```
 
-Install the required libraries:
+Install the dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
----
-
-## Running the Application
-
-After placing `creditcard.csv` in the project directory, run:
+Run the Streamlit application:
 
 ```bash
 streamlit run app.py
 ```
 
-Then open the local Streamlit address shown in the terminal.
+---
+
+##  Streamlit Deployment
+
+The application is designed for deployment with Streamlit Community Cloud.
+
+The deployment uses:
+
+```text
+Branch: main
+Main file: app.py
+```
+
+Updates pushed to the GitHub `main` branch can be reflected in the deployed application after Streamlit redeploys the project.
 
 ---
 
-## Disclaimer
+##  Important Disclaimer
 
-This project is developed for **educational and portfolio purposes**.
+This project was created for **educational and portfolio purposes**.
 
-It is not a production banking fraud detection system and should not be used to make real financial decisions.
+The **New Transaction Analysis** section is a rule-based demonstration simulator.
+
+The **ML Model Evaluation** section uses a trained Random Forest classifier on anonymized credit card transaction data.
+
+Neither component is intended for production banking systems or real financial decision-making.
+
+The model fraud score should not be interpreted as a calibrated real-world probability of fraud.
 
 ---
 
-## Author
+##  Future Improvements
 
-**Sıla Demir**
+Possible future improvements include:
 
-Computer Engineering Student
+- SHAP-based model explainability
+- Precision-Recall and ROC curves
+- Probability calibration
+- Adjustable classification thresholds
+- Additional machine learning model comparisons
+- REST API integration
+- Docker deployment
+- Database integration
+- Transaction history dashboard
+- Authentication and user roles
+
+---
+
+##  Project Purpose
+
+This project demonstrates practical experience with:
+
+- Machine learning
+- Classification problems
+- Imbalanced datasets
+- Model evaluation
+- Fraud detection concepts
+- Data visualization
+- Interactive application development
+- Git/GitHub version control
+- Streamlit deployment
+
+---
+
+**AI Fraud Detection System V2**
+
+Built as a machine learning and software development portfolio project.
